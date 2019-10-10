@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>大事件-后台登录页</title>
+    <link rel="stylesheet" type="text/css" href="./css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="./css/main.css" />
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css" />
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="main_wrap">
+      <div class="header">
+        <a href="javascript:;" class="logo"
+          ><img src="images/logo.png" alt=""
+        /></a>
+        <div class="copyright">
+          CopyRight © 2019 深圳百秀信息技术股份有限公司<br />All Rights Reserved
+        </div>
+      </div>
+
+      <div class="login_form_con">
+        <div class="login_title"></div>
+        <form class="login_form">
+          <i class="iconfont icon-user"></i>
+          <i class="iconfont icon-key"></i>
+          <input type="text" class="input_txt" placeholder="邮箱/手机号" />
+          <input type="password" class="input_pass" placeholder="密码" />
+          <input type="submit" class="input_sub" value="登 录" />
+        </form>
+      </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">友情提示</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body&hellip;</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">
+              确认
+            </button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <script>
+      $(function() {
+        /*
+      1.登录功能
+      1.1给登录按钮注册点击事件
+      1.2阻止默认跳转
+      1.3获取用户名密码
+      1.4 ajax请求
+      1.5 成功,跳转首页
+      请求地址：/admin/user/login
+      请求方式：post
+      请求参数：
+      username | string | 用户名（admin） 
+      password | string | 密码(123456)    
+      */
+        $(".input_sub").click(function(e) {
+          e.preventDefault();
+          var username = $(".input_txt").val();
+          var password = $(".input_pass").val();
+          console.log(username, password);
+
+          if (username.trim().length == 0 || password.trim().length == 0) {
+            $(".modal-body>p").text("请输入用户名和密码");
+            $("#myModal").modal();
+            return;
+          }
+          $.ajax({
+            url: "http://localhost:8080/api/v1/admin/user/login",
+            type: "post",
+            dataType: "json",
+            data: {
+              username: username,
+              password: password
+            },
+            success: function(backData) {
+              console.log(backData);
+              if (backData.code == 200) {
+                  //登录成功之后,将用户的token存储到localStorage
+                localStorage.setItem('token',backData.token)
+                $(".modal-body>p").text(backData.msg);
+                $("#myModal").modal();
+                $("#myModal").on("hidden.bs.modal", function(e) {
+                    window.location.href = './index.html';
+                  // do something...
+                });
+              }else{
+                $(".modal-body>p").text(backData.msg);
+                $("#myModal").modal();
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

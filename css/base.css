@@ -1,0 +1,53 @@
+a,
+div,
+input,
+ul,
+li,
+span,
+p,
+i,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+img,
+button,
+header,
+nav,
+strong,
+body{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+img{
+    vertical-align: middle;
+    border: none;
+}
+i{
+    font-style: normal;
+}
+body{
+    font-size: 12px;
+    line-height: 1;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+input{
+    outline: none;
+    border: none;
+}
+.clearfix::after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.clearfix{
+    *zoom:1;
+}
