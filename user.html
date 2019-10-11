@@ -78,32 +78,36 @@
         请求方式：get
         请求参数：无
         */
-         $.ajax({
-             url:BigNew.user_detail,
-             type:'get',
-             dataType:'json',
-             success: function(backData){
-                 for(var key in backData.data){
-                    $('input.'+key).val(backData.data[key]);
-                 }
+            //数据响应之后,渲染页面
+            $.ajax({
+                url:BigNew.user_detail,
+                type:'get',
+                dataType:'json',
+                success: function(backData){
+                    console.log(backData);
+                for(var key in backData.data ){
+                  $('.'+ key).val(backData.data[key]);  
+                }
+                $('.user_pic').attr('src',backData.data.userPic);
+                }
+            });
+            //对象的遍历key取值只能用[]
+            //由于表单元素的类名与data的属性名一致,可以使用对象遍历语法     
             //  $('input.username').val(backData.data.username);
             //  $('input.nickname').val(backData.data.nickname);
             //  $('input.email').val(backData.data.email);
             //  $('input.password').val(backData.data.password);
-             $('.user_pic').attr('src',backData.data.userPic);
-
-             }
-         });
+     
         //文件预览:固定四个步骤
-        //1.给file表单元素注册onchange事件
+
         $('#exampleInputFile').change(function () {
-            //1.2 获取用户选择的图片
-            var file = this.files[0];
-            //1.3 将文件转为src路径
-            var url = URL.createObjectURL(file);
-            //1.4 将url路径赋值给img标签的src
-            $('.user_pic').attr('src', url);
-        });
+                //1.2 获取用户选择的图片
+                var file = this.files[0];
+                //1.3 将文件转为src路径
+                var url = URL.createObjectURL(file);
+                //1.4 将url路径赋值给img标签的src
+                $('.user_pic').attr('src', url);
+            });
         //修改个人信息:formData文件
         $('.btn-edit').on('click',function(e){
             //禁用表单默认提交事件
@@ -121,8 +125,9 @@
                     console.log(backData);
                     
                     if(backData.code == 200){
-                        alert('修改成功');
-                        window.location.reload();
+                        alert('更新成功');
+                        //这种跳转方式只能用服务器请求的才能跳转---live server插件去页面
+                        window.parent.location.reload();
                     }
                 }
             });
